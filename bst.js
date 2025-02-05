@@ -50,27 +50,58 @@ const insert = (root, value) => {
   }
   return root;
 };
+const findMin = (node) => {
+  while (node.left !== null) {
+    node = node.left;
+  }
+  return node;
+};
+
 const deleteItem = (root, value) => {
   if (root === null) {
-    console.log("Root does not exist. No deletion necessary.");
-    return;
-  } else if (root.data === value) {
-    if ((root.left === null) & (root.right === null)) {
+    return null;
+  }
+
+  if (value < root.data) {
+    root.left = deleteItem(root.left, value);
+  } else if (value > root.data) {
+    root.right = deleteItem(root.right, value);
+  } else {
+    if (root.left === null && root.right === null) {
       return null;
     }
+
     if (root.left === null) {
       return root.right;
     }
+
     if (root.right === null) {
       return root.left;
     }
-    //If there are two children left what do we do.. we compare each one. Smallest goes on the left, largest on right. But then that means what we did delete is the root. So how do we determine which should be the root? Do we really need to go back up to the next root and determine where it should go?
-    return;
+    let successor = findMin(root.right);
+    root.data = successor.data;
+    root.right = deleteItem(root.right, successor.data);
   }
-  if (value > root.data) {
-    root.right = deleteItem(root.right, value);
-  } else if (value < root.data) {
-    root.left = deleteItem(root.left, value);
+
+  return root;
+};
+
+const find = (root, value) => {
+  if (!root) return null;
+  if (value === root.data) {
+    const returnedData = `Root: ${root.data}, Left: ${root.left?.data}, Right: ${root.right?.data}`;
+    console.log(returnedData);
+    return {
+      data: root.data,
+      left: root.left,
+      right: root.right,
+    };
+  }
+
+  if (value < root.data) {
+    return find(root.left, value);
+  } else if (value > root.data) {
+    return find(root.right, value);
   }
 };
 
