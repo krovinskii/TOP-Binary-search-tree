@@ -105,6 +105,36 @@ const find = (root, value) => {
   }
 };
 
+const levelOrder = (callback, root) => {
+  //Accepts callback, traverses tree and applies function to each node as it traverses, Like Array.forEach(). Breadth first.
+
+  if (root === null) {
+    console.log(`${callback.toString()} levelOrder complete.`);
+    return;
+  }
+  const queue = [];
+  const visited = [];
+
+  //Need to deal with cases of if these exist or if they are the same value
+  if (root) {
+    queue.push(root);
+    if (root.left) {
+      queue.push(root.left);
+    }
+    if (root.right) {
+      queue.push(root.right);
+    }
+    callback(root);
+    visited.push(root);
+    queue[0].pop();
+  }
+  if (root.left) {
+    levelOrder(callback, root.left);
+  } else if (root.right) {
+    levelOrder(callback, root.right);
+  }
+};
+//But that's not breadth first this is depth first...Whoops!
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = buildTree(arr);
 prettyPrint(tree);
