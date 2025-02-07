@@ -161,6 +161,37 @@ const postOrder = (callback, root) => {
   postOrder(callback, root.right);
   callback(root);
 };
+const height = (node) => {
+  if (node === null) return -1;
+
+  return 1 + Math.max(height(node.left), height(node.right));
+};
+const depth = (node, root, currentDepth = 0) => {
+  if (root === null) return -1;
+  if (root === node) return currentDepth;
+
+  let leftDepth = depth(node, root.left, currentDepth + 1);
+  if (leftDepth !== -1) return leftDepth;
+
+  return depth(node, root.right, currentDepth + 1);
+};
+const isBalanced = (root) => {
+  if (root === null) return true;
+  let leftHeight = height(root.left);
+  let rightHeight = height(root.right);
+
+  if (Math.abs(leftHeight - rightHeight) > 1) return false;
+
+  return isBalanced(root.left) && isBalanced(root.right);
+};
+const rebalance = (root) => {
+  const inOrderArray = [];
+  inOrder((node) => {
+    inOrderArray.push(node.data);
+  }, root);
+
+  return buildTree(inOrderArray);
+};
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = buildTree(arr);
