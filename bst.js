@@ -113,28 +113,55 @@ const levelOrder = (callback, root) => {
     return;
   }
   const queue = [];
-  const visited = [];
 
-  //Need to deal with cases of if these exist or if they are the same value
   if (root) {
     queue.push(root);
-    if (root.left) {
-      queue.push(root.left);
-    }
-    if (root.right) {
-      queue.push(root.right);
-    }
-    callback(root);
-    visited.push(root);
-    queue[0].pop();
   }
-  if (root.left) {
-    levelOrder(callback, root.left);
-  } else if (root.right) {
-    levelOrder(callback, root.right);
+  while (queue.length >= 1) {
+    let currentNode = queue.shift();
+    callback(currentNode);
+
+    if (currentNode.left) {
+      queue.push(currentNode.left);
+    }
+    if (currentNode.right) {
+      queue.push(currentNode.right);
+    }
   }
 };
-//But that's not breadth first this is depth first...Whoops!
+const inOrder = (callback, root) => {
+  if (typeof callback !== "function") {
+    throw new Error("Callback function is required.");
+  }
+  if (root === null) return;
+
+  inOrder(callback, root.left);
+  callback(root);
+  inOrder(callback, root.right);
+};
+
+const preOrder = (callback, root) => {
+  if (typeof callback !== "function") {
+    throw new Error("Callback function is required.");
+  }
+  if (root === null) return;
+
+  callback(root);
+  preOrder(callback, root.left);
+  preOrder(callback, root.right);
+};
+
+const postOrder = (callback, root) => {
+  if (typeof callback !== "function") {
+    throw new Error("Callback function is required.");
+  }
+  if (root === null) return;
+
+  postOrder(callback, root.left);
+  postOrder(callback, root.right);
+  callback(root);
+};
+
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = buildTree(arr);
 prettyPrint(tree);
